@@ -8,21 +8,43 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>CSP Research Engine</h1>
-        <p>Security research tool for CSP analysis and misconfiguration detection</p>
+<div class="container">
 
-        <textarea id="search"
-            placeholder="Enter CSP header or search gadget..."
-            rows="5"></textarea>
+    <h1>🔐 CSP Research Engine</h1>
+    <p class="subtitle">Live CSP Security Analysis Tool</p>
 
-        <ul id="results"></ul>
+    <textarea id="search"
+        placeholder="Paste CSP header here..."></textarea>
 
-        <footer>
-            <p>Security Research Tool • For educational purposes only</p>
-        </footer>
+    <!-- Dashboard -->
+    <div class="dashboard">
+
+        <div class="card">
+            <h3>Risk Score</h3>
+            <div id="score" class="score">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Risk Level</h3>
+            <div id="level" class="level">-</div>
+        </div>
+
+        <div class="card">
+            <h3>Exposed Sources</h3>
+            <div id="sources">0</div>
+        </div>
+
     </div>
 
-    <script type="module" src="app.js"></script>
+    <h2>Findings</h2>
+    <ul id="findings"></ul>
+
+    <h2>Matched Gadgets</h2>
+    <ul id="matches"></ul>
+
+</div>
+
+<script type="module" src="app.js"></script>
+
 </body>
 </html>
