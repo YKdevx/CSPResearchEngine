@@ -10,35 +10,29 @@ const sourcesEl = document.getElementById("sources");
 const findingsEl = document.getElementById("findings");
 const matchesEl = document.getElementById("matches");
 
+const exportBtn = document.getElementById("exportBtn");
+
 let gadgets = [];
 
 /**
- * Load gadget database
+ * Load database
  */
 fetch("./data/gadgets.json")
-    .then(response => response.json())
+    .then(res => res.json())
     .then(json => {
         gadgets = json;
     })
-    .catch(error => {
-        console.error("Failed to load gadgets:", error);
-    });
+    .catch(err => console.error(err));
 
 /**
- * Render full CSP report in UI
+ * Render UI
  */
 function renderReport(report) {
 
-    // Risk score
     scoreEl.textContent = `${report.score}/100`;
-
-    // Risk level
     levelEl.textContent = report.level;
-
-    // Exposed sources summary
     sourcesEl.textContent = report.summary.exposedSources;
 
-    // Findings list
     findingsEl.innerHTML = report.findings.length
         ? report.findings.map(f => `
             <li>
@@ -48,7 +42,6 @@ function renderReport(report) {
         `).join("")
         : "<li>No issues found</li>";
 
-    // Matches list
     matchesEl.innerHTML = report.matches.length
         ? report.matches.map(m => `
             <li>
@@ -60,7 +53,7 @@ function renderReport(report) {
 }
 
 /**
- * Live CSP analysis handler
+ * Live analyzer
  */
 function analyzeInput(value) {
 
@@ -68,29 +61,53 @@ function analyzeInput(value) {
 
     if (!trimmed) {
 
-        // reset UI
-        scoreEl.textContent = "0";
+        scoreEl.textContent = "0/100";
         levelEl.textContent = "-";
         sourcesEl.textContent = "0";
-        findingsEl.innerHTML = "";
-        matchesEl.innerHTML = "";
+
+        findingsEl.innerHTML = "<li>No analysis yet</li>";
+        matchesEl.innerHTML = "<li>No matches yet</li>";
 
         return;
     }
 
-    // 1. Parse CSP
-    const parsedPolicy = parseCSP(trimmed);
+    const parsed = parseCSP(trimmed);
+    const report = generateCSPReport(parsed, gadgets);
 
-    // 2. Generate full report
-    const report = generateCSPReport(parsedPolicy, gadgets);
-
-    // 3. Render UI
     renderReport(report);
 }
 
 /**
- * Input event (live analysis)
+ * Input listener
  */
-textarea.addEventListener("input", (event) => {
-    analyzeInput(event.target.value);
+textarea.addEventListener("input", (e) => {
+    analyzeInput(e.target.value);
+});
+
+/**
+ * Export report
+ */
+exportBtn.addEventListener("click", () => {
+
+    const value = textarea.value.trim();
+    if (!value) return;
+
+    const report = generateCSPReport(
+        parseCSP(value),
+        gadgets
+    );
+
+    const blob = new Blob(
+        [JSON.stringify(report, null, 2)],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "csp-report.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
 });
