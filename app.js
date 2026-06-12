@@ -35,3 +35,12 @@ function render(results) {
 searchInput.addEventListener("input", (e) => {
     search(e.target.value);
 });
+import { parseCSP } from "./core/parser.js";
+
+const testPolicy = `
+default-src 'self';
+script-src 'self' https://google.com https://youtube.com;
+img-src *;
+`;
+
+console.log(parseCSP(testPolicy));
