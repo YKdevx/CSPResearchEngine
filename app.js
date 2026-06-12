@@ -30,7 +30,7 @@ fetch("./data/gadgets.json")
 function renderReport(report) {
 
     // Risk score
-    scoreEl.textContent = report.score;
+    scoreEl.textContent = `${report.score}/100`;
 
     // Risk level
     levelEl.textContent = report.level;
