@@ -1,5 +1,6 @@
 import { parseCSP } from "./core/parser.js";
 import { analyzeCSP } from "./core/cspAnalyzer.js";
+import { findMatchingGadgets } from "./core/search.js";
 
 const searchInput = document.getElementById("search");
 const resultsList = document.getElementById("results");
@@ -12,7 +13,12 @@ let gadgets = [];
 fetch("./data/gadgets.json")
     .then(response => response.json())
     .then(json => {
+
         gadgets = json;
+
+        // Run demo after database is loaded
+        runDemo();
+
     })
     .catch(error => {
         console.error("Failed to load gadgets:", error);
@@ -61,24 +67,38 @@ searchInput.addEventListener("input", (event) => {
 });
 
 /**
- * Temporary CSP parser/analyzer test
- * (Will be replaced by real UI integration later)
+ * Temporary demo function
+ * Tests parser, analyzer and matching engine
  */
-const testPolicy = `
-default-src 'self';
-script-src 'self' https://google.com https://youtube.com *;
-img-src data:;
-`;
+function runDemo() {
 
-const parsedPolicy = parseCSP(testPolicy);
+    const testPolicy = `
+        default-src 'self';
+        script-src 'self' https://google.com https://youtube.com *;
+        img-src data:;
+    `;
 
-console.log("Parsed CSP:");
-console.log(parsedPolicy);
+    // Parse CSP
+    const parsedPolicy = parseCSP(testPolicy);
 
-console.log("Analysis Results:");
-const analysis = analyzeCSP(parsedPolicy);
+    console.log("Parsed Policy:");
+    console.log(parsedPolicy);
 
-console.log("Risk Score:", analysis.score);
-console.log("Risk Level:", analysis.level);
+    // Analyze CSP
+    const analysis = analyzeCSP(parsedPolicy);
 
-console.table(analysis.findings);
+    console.log("Risk Score:", analysis.score);
+    console.log("Risk Level:", analysis.level);
+
+    console.table(analysis.findings);
+
+    // Search matching gadgets
+    const matches = findMatchingGadgets(
+        parsedPolicy,
+        gadgets
+    );
+
+    console.log("Matching Gadgets:");
+
+    console.table(matches);
+}
