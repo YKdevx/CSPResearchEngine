@@ -1,6 +1,7 @@
 import { parseCSP } from "./core/parser.js";
 import { analyzeCSP } from "./core/cspAnalyzer.js";
 import { findMatchingGadgets } from "./core/search.js";
+import { generateCSPReport } from "./core/report.js";
 
 const searchInput = document.getElementById("search");
 const resultsList = document.getElementById("results");
@@ -74,31 +75,22 @@ function runDemo() {
 
     const testPolicy = `
         default-src 'self';
-        script-src 'self' https://google.com https://youtube.com *;
+        script-src 'self' https://google.com *.google.com;
         img-src data:;
     `;
 
-    // Parse CSP
     const parsedPolicy = parseCSP(testPolicy);
 
-    console.log("Parsed Policy:");
-    console.log(parsedPolicy);
+    const report = generateCSPReport(parsedPolicy, gadgets);
 
-    // Analyze CSP
-    const analysis = analyzeCSP(parsedPolicy);
+    console.log("🔥 CSP SECURITY REPORT");
 
-    console.log("Risk Score:", analysis.score);
-    console.log("Risk Level:", analysis.level);
+    console.log("Risk Score:", report.score);
+    console.log("Risk Level:", report.level);
 
-    console.table(analysis.findings);
+    console.log("Summary:", report.summary);
 
-    // Search matching gadgets
-    const matches = findMatchingGadgets(
-        parsedPolicy,
-        gadgets
-    );
+    console.table(report.findings);
 
-    console.log("Matching Gadgets:");
-
-    console.table(matches);
+    console.table(report.matches);
 }
