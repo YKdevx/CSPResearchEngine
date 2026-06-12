@@ -76,4 +76,9 @@ console.log("Parsed CSP:");
 console.log(parsedPolicy);
 
 console.log("Analysis Results:");
-console.table(analyzeCSP(parsedPolicy));
+const analysis = analyzeCSP(parsedPolicy);
+
+console.log("Risk Score:", analysis.score);
+console.log("Risk Level:", analysis.level);
+
+console.table(analysis.findings);
