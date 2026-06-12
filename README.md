@@ -39,6 +39,32 @@ CSP Research Engine helps security researchers understand and analyze CSP config
 
 ---
 
+## 🚀 How to Run
+
+This project is a pure frontend JavaScript application (no backend required).
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/YOUR_USERNAME/CSPResearchEngine.git
+cd CSPResearchEngine
+```
+### 2. Start a local server
+Because ES Modules are used, you must run it on a local server. 
+**Option A (VS Code)** 
+Install Live Server extension and click: 
+```bash
+Go Live
+```
+**Option C (Node.js)**
+```bash
+npx serve .
+```
+### 3. Open in browser
+Navigate to:
+```
+http://localhost:8000
+```
+
 ## Project Structure
 
 ```text
