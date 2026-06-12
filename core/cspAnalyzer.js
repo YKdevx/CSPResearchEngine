@@ -3,61 +3,63 @@ export function analyzeCSP(parsedPolicy) {
     const findings = [];
     let score = 0;
 
+    const addFinding = (severity, directive, issue, weight) => {
+        findings.push({ severity, directive, issue });
+        score += weight;
+    };
+
     for (const [directive, values] of Object.entries(parsedPolicy)) {
 
-        if (values.includes("*")) {
+        const normalized = values.map(v => v.trim().toLowerCase());
 
-            findings.push({
-                severity: "HIGH",
+        // wildcard
+        if (normalized.includes("*")) {
+            addFinding(
+                "HIGH",
                 directive,
-                issue: "Wildcard source (*) detected"
-            });
-
-            score += 30;
+                "Wildcard source (*) detected",
+                30
+            );
         }
 
-        if (values.includes("'unsafe-inline'")) {
-
-            findings.push({
-                severity: "HIGH",
+        // unsafe-inline
+        if (normalized.includes("'unsafe-inline'")) {
+            addFinding(
+                "HIGH",
                 directive,
-                issue: "unsafe-inline detected"
-            });
-
-            score += 25;
+                "unsafe-inline detected",
+                25
+            );
         }
 
-        if (values.includes("'unsafe-eval'")) {
-
-            findings.push({
-                severity: "CRITICAL",
+        // unsafe-eval
+        if (normalized.includes("'unsafe-eval'")) {
+            addFinding(
+                "CRITICAL",
                 directive,
-                issue: "unsafe-eval detected"
-            });
-
-            score += 40;
+                "unsafe-eval detected",
+                40
+            );
         }
 
-        if (values.includes("data:")) {
-
-            findings.push({
-                severity: "MEDIUM",
+        // data:
+        if (normalized.includes("data:")) {
+            addFinding(
+                "MEDIUM",
                 directive,
-                issue: "data: URI allowed"
-            });
-
-            score += 15;
+                "data: URI allowed",
+                15
+            );
         }
 
-        if (values.includes("blob:")) {
-
-            findings.push({
-                severity: "MEDIUM",
+        // blob:
+        if (normalized.includes("blob:")) {
+            addFinding(
+                "MEDIUM",
                 directive,
-                issue: "blob: URI allowed"
-            });
-
-            score += 10;
+                "blob: URI allowed",
+                10
+            );
         }
     }
 
@@ -65,13 +67,9 @@ export function analyzeCSP(parsedPolicy) {
 
     let level = "LOW";
 
-    if (score >= 75) {
-        level = "CRITICAL";
-    } else if (score >= 50) {
-        level = "HIGH";
-    } else if (score >= 25) {
-        level = "MEDIUM";
-    }
+    if (score >= 75) level = "CRITICAL";
+    else if (score >= 50) level = "HIGH";
+    else if (score >= 25) level = "MEDIUM";
 
     return {
         score,
