@@ -1,43 +1,60 @@
-# CSP Research Engine
+## 🔐 CSP Research Engine
 
-A security-focused research tool for analyzing Content Security Policy (CSP) configurations and identifying potentially risky patterns, misconfigurations, and known third-party script sources.
+A real-time Content Security Policy (CSP) analysis tool that parses CSP headers, evaluates security risks, and maps configurations to known vulnerable gadget patterns.
+
+### 🎯 Key Features
+
+- Real-time CSP parsing
+- Security risk scoring (0–100)
+- Detection of unsafe directives (`unsafe-inline`, `unsafe-eval`)
+- Wildcard and domain-based source analysis
+- Gadget matching engine for known bypass patterns
+- Exportable security reports (JSON)
+- Fully frontend-based (no backend required)
+
+### 🧠 What this project demonstrates
+
+- Web security fundamentals (CSP, XSS mitigation)
+- JavaScript modular architecture
+- Data analysis & rule-based engines
+- Frontend state management
+- Security-focused thinking (Bug Bounty mindset)
+---
+
+## 🛠 Tech Stack
+
+- JavaScript (ES Modules)
+- HTML5
+- CSS3
+- Fetch API
+- Blob API (Export system)
 
 ---
 
-## Overview
-
-Content Security Policy (CSP) is one of the most important browser security mechanisms for mitigating Cross-Site Scripting (XSS).
-
-However, many CSP deployments contain overly permissive rules, risky third-party domains, wildcard sources, or unsafe directives that weaken their protection.
-
-CSP Research Engine helps security researchers understand and analyze CSP configurations through automated parsing and risk assessment.
-
+## 🏗 Architecture
+```text
+CSP Input
+↓
+Parser (cspParser.js)
+↓
+Analyzer (cspAnalyzer.js)
+↓
+Report Engine (report.js)
+↓
+UI Dashboard (app.js)
+↓
+Export System (JSON)
+```
 ---
 
-## Features
+## 🎯 Use Cases
 
-- CSP header analysis
-- Directive extraction
-- Risk scoring
-- Domain identification
-- Third-party source discovery
-- Searchable gadget database
-- Fast client-side filtering
-- Secure rendering of research data
+- Security researchers analyzing CSP misconfigurations
+- Bug bounty hunters testing XSS bypass surfaces
+- Learning CSP behavior in modern browsers
+- Demonstrating frontend security tooling skills
 
----
-
-## Planned Features
-
-- Advanced CSP parser
-- Risk classification engine
-- Domain reputation scoring
-- Export reports
-- Dark mode
-- Search history
-- CSP comparison mode
-
----
+--- 
 
 ## 🚀 How to Run
 
@@ -65,21 +82,7 @@ Navigate to:
 http://localhost:8000
 ```
 
-## Project Structure
-
-```text
-CSP-Research-Engine
-│
-├── index.html
-├── styles.css
-├── app.js
-│
-├── data/
-├── core/
-├── utils/
-│
-└── README.md
-```
+---
 
 ## Security Notice
 
