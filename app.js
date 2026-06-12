@@ -1,19 +1,29 @@
+import { parseCSP } from "./core/parser.js";
+
 const searchInput = document.getElementById("search");
 const resultsList = document.getElementById("results");
 
-let data = [];
+let gadgets = [];
 
-// load data
 fetch("./data/gadgets.json")
     .then(res => res.json())
     .then(json => {
-        data = json;
+        gadgets = json;
+    })
+    .catch(error => {
+        console.error("Failed to load gadgets:", error);
     });
 
 function search(query) {
-    const q = query.toLowerCase();
 
-    const results = data.filter(item =>
+    const q = query.trim().toLowerCase();
+
+    if (!q) {
+        resultsList.innerHTML = "";
+        return;
+    }
+
+    const results = gadgets.filter(item =>
         item.domain.toLowerCase().includes(q) ||
         item.payload.toLowerCase().includes(q)
     );
@@ -22,20 +32,20 @@ function search(query) {
 }
 
 function render(results) {
+
     resultsList.innerHTML = results.length
-        ? results.map(r => `
+        ? results.map(item => `
             <li>
-                <strong>${r.domain}</strong><br/>
-                <code>${r.payload}</code>
+                <strong>${item.domain}</strong><br>
+                <code>${item.payload}</code>
             </li>
         `).join("")
         : "<li>No results found</li>";
 }
 
-searchInput.addEventListener("input", (e) => {
-    search(e.target.value);
+searchInput.addEventListener("input", (event) => {
+    search(event.target.value);
 });
-import { parseCSP } from "./core/parser.js";
 
 const testPolicy = `
 default-src 'self';
