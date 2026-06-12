@@ -68,3 +68,18 @@ li {
     border-radius: 6px;
     border-left: 3px solid #38bdf8;
 }
+.low {
+    color: #22c55e;
+}
+
+.medium {
+    color: #facc15;
+}
+
+.high {
+    color: #f97316;
+}
+
+.critical {
+    color: #ef4444;
+}
