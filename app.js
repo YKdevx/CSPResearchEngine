@@ -12,7 +12,8 @@ const matchesEl = document.getElementById("matches");
 
 const exportBtn = document.getElementById("exportBtn");
 
-let gadgets = [];
+let gadgets = null;
+let isLoaded = false;
 
 /**
  * Load database
@@ -21,11 +22,16 @@ fetch("./data/gadgets.json")
     .then(res => res.json())
     .then(json => {
         gadgets = json;
+        isLoaded = true;
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+        console.error("Failed to load gadgets:", err);
+        gadgets = [];
+        isLoaded = false;
+    });
 
 /**
- * Render UI
+ * Render UI report
  */
 function renderReport(report) {
 
@@ -53,9 +59,11 @@ function renderReport(report) {
 }
 
 /**
- * Live analyzer
+ * Live CSP analyzer
  */
 function analyzeInput(value) {
+
+    if (!isLoaded || !gadgets) return;
 
     const trimmed = value.trim();
 
@@ -78,19 +86,20 @@ function analyzeInput(value) {
 }
 
 /**
- * Input listener
+ * Input listener (live analysis)
  */
 textarea.addEventListener("input", (e) => {
     analyzeInput(e.target.value);
 });
 
 /**
- * Export report
+ * Export CSP report
  */
 exportBtn.addEventListener("click", () => {
 
-    const value = textarea.value.trim();
-    if (!value) return;
+    const value = textarea.value;
+    if (!value || !value.trim()) return;
+    if (!gadgets) return;
 
     const report = generateCSPReport(
         parseCSP(value),
