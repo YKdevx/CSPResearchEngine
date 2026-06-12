@@ -1,12 +1,16 @@
 import { parseCSP } from "./core/parser.js";
+import { analyzeCSP } from "./core/cspAnalyzer.js";
 
 const searchInput = document.getElementById("search");
 const resultsList = document.getElementById("results");
 
 let gadgets = [];
 
+/**
+ * Load gadget database
+ */
 fetch("./data/gadgets.json")
-    .then(res => res.json())
+    .then(response => response.json())
     .then(json => {
         gadgets = json;
     })
@@ -14,6 +18,9 @@ fetch("./data/gadgets.json")
         console.error("Failed to load gadgets:", error);
     });
 
+/**
+ * Search gadgets by domain or payload
+ */
 function search(query) {
 
     const q = query.trim().toLowerCase();
@@ -31,6 +38,9 @@ function search(query) {
     render(results);
 }
 
+/**
+ * Render search results
+ */
 function render(results) {
 
     resultsList.innerHTML = results.length
@@ -43,14 +53,27 @@ function render(results) {
         : "<li>No results found</li>";
 }
 
+/**
+ * Search event listener
+ */
 searchInput.addEventListener("input", (event) => {
     search(event.target.value);
 });
 
+/**
+ * Temporary CSP parser/analyzer test
+ * (Will be replaced by real UI integration later)
+ */
 const testPolicy = `
 default-src 'self';
-script-src 'self' https://google.com https://youtube.com;
-img-src *;
+script-src 'self' https://google.com https://youtube.com *;
+img-src data:;
 `;
 
-console.log(parseCSP(testPolicy));
+const parsedPolicy = parseCSP(testPolicy);
+
+console.log("Parsed CSP:");
+console.log(parsedPolicy);
+
+console.log("Analysis Results:");
+console.table(analyzeCSP(parsedPolicy));
