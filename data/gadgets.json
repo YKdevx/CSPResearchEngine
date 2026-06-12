@@ -1,1 +1,12 @@
-
+[
+  {
+    "domain": "7b936.v.fwmrm.net",
+    "payload": "<script src='https://...cbfn=alert(1)'></script>",
+    "tags": ["jsonp", "ads"]
+  },
+  {
+    "domain": "aax-eu.amazon.com",
+    "payload": "<script src='https://...callback=alert(1)'></script>",
+    "tags": ["cdn", "jsonp"]
+  }
+]
