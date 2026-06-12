@@ -17,7 +17,9 @@ export function parseCSP(cspHeader) {
 
         const directiveName = parts[0];
 
-        const values = parts.slice(1);
+        const values = parts
+            .slice(1)
+            .map(v => v.trim());
 
         result[directiveName] = values;
     });
