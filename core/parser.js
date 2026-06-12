@@ -1,4 +1,5 @@
 export function parseCSP(cspHeader) {
+
     if (!cspHeader || typeof cspHeader !== "string") {
         return {};
     }
