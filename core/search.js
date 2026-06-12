@@ -13,16 +13,16 @@ function normalizeDomain(input) {
  */
 function matchesWildcard(source, domain) {
 
-    if (source.startsWith("*.")) {
+    const clean = source
+        .replace(/^https?:\/\//, "")
+        .replace(/^\*\./, "");
 
-        const base = source.replace("*.", "");
-
-        return domain === base || domain.endsWith("." + base);
+    if (source.includes("*.")) {
+        return domain === clean || domain.endsWith("." + clean);
     }
 
-    return domain.includes(source) || source.includes(domain);
+    return domain.includes(clean) || clean.includes(domain);
 }
-
 /**
  * Extract valid domains from CSP
  */
