@@ -67,11 +67,9 @@ export function analyzeCSP(parsedPolicy) {
 
     if (score >= 75) {
         level = "CRITICAL";
-    }
-    else if (score >= 50) {
+    } else if (score >= 50) {
         level = "HIGH";
-    }
-    else if (score >= 25) {
+    } else if (score >= 25) {
         level = "MEDIUM";
     }
 
